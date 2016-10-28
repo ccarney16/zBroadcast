@@ -1,70 +1,99 @@
 package org.zyphinia.zbroadcast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.bukkit.Bukkit;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.entity.Player;
 
 /*
  * Main Broadcasting Class, contains all the functions needed to broadcast messages
  */
-public class Broadcast {
+class Broadcast {
 
-    private Timer _broadcastTimer = null; //Our timer, currently null
+    private List<String> _msgList = new ArrayList<>(); //Message list
 
-    private String _tag = null; //Broadcast tag, typically in the form of [Broadcast]
-    private List<String> _msgList = null; //Message list
-    private int _msgIndex = 0; //What are we currently on?
+    private int _currentIndex = 0; //What are we currently on?
 
-    private long _msgDelay = 0;  //Delay in java ticks, so 1000 is 1 second
-
-    //simple task
-    TimerTask _task = new TimerTask() {
-        @Override
-        public void run() {
-            Next();
-            _broadcastTimer.purge();
-        }
-    };
+    private int schedulerTask; //We use CraftBukkit's scheduler system
 
     //Loads all the variables we need
-    public Broadcast(String tag, List<String> msgList, long msgDelay) {
-        _tag = tag;
-        _msgList = msgList;
-        _msgDelay = msgDelay;
+    Broadcast() {
     }
 
-    public void Start() throws Error {
-        if (_msgDelay < 1000) {
-            throw new Error("msg delay must be above or equal to one second (Are you sure you want to lag bukkit/spigot to death?)");
+    void Start() throws Error {
+        //if (zbroadcast.GetInstance().getConfig().getLong("delay") < 1000) {
+        //    throw new Error("msg delay must be above or equal to one second (Are you sure you want to lag bukkit/spigot to death?)");
+        //}
+
+        //might not be the safest idea
+        for (Object l: zbroadcast.GetInstance().getConfig().getList("messages")) {
+            _msgList.add(l.toString());
         }
 
-        _broadcastTimer = new Timer("_broadcastTimer");
-
-        //Start the schedule
-        _broadcastTimer.scheduleAtFixedRate(_task, 1000, _msgDelay);
+        //get task ID before going anywhere
+        this.schedulerTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(zbroadcast.GetInstance(), new Runnable() {
+            @Override
+            public void run() {
+                next();
+            }
+        }, 0L, zbroadcast.GetInstance().getConfig().getLong("delay") * 20L);
     }
 
     //Stops the broadcasting class
-    public void Stop() {
-        try {
-            _broadcastTimer.cancel();
-            _broadcastTimer = null;
-        } catch (Exception e) {
-            //ignore the problem entirely
-        }
+    void Stop() {
+        Bukkit.getScheduler().cancelTask(schedulerTask);
     }
 
     //Broadcast next message
-    public void Next() {
+    private void next() {
         //Makes sure our index does not go over the message's array length
-        if(_msgIndex > (_msgList.toArray().length - 1)) {
-            _msgIndex = 0;
+        if(_currentIndex > (_msgList.toArray().length - 1)) {
+            _currentIndex = 0;
         }
 
-        Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&',_tag + _msgList.toArray()[_msgIndex].toString()));
-        _msgIndex++;
+        this.BroadcastMsg(_currentIndex);
+        _currentIndex++;
+    }
+
+    //Broadcasts a message from the list, has a catch all failure.
+    void BroadcastMsg(int index) throws Error {
+        if (index > _msgList.toArray().length -1) {
+            throw new Error("Index is out of bounds");
+        }
+
+        //Send to the other broadcast message
+        BroadcastMsg(ChatColor.translateAlternateColorCodes('&',zbroadcast.GetInstance().getConfig().getString("broadcast-tag") + _msgList.toArray()[_currentIndex].toString()));
+    }
+
+    //Allows broadcasting straight up, blank for now.
+    void BroadcastMsg(String s) {
+        for(Player p : Bukkit.getOnlinePlayers()) { p.sendMessage(s); }
+
+        //Sends a Message to console if configured
+        if (zbroadcast.GetInstance().getConfig().getBoolean("send-to-console", true)) {
+            Bukkit.getConsoleSender().sendMessage(s);
+        }
+    }
+
+    //Adds a Message to the list
+    void AddMsg(String msg) {
+        _msgList.add(msg);
+        zbroadcast.UpdateList(this._msgList);
+    }
+
+    //Adds a message at a specific index
+    void InsertMsg(int index, String msg) {
+        _msgList.add(index, msg);
+        zbroadcast.UpdateList(this._msgList);
+    }
+
+    //Removes a message from the list
+    void RemoveMsg(int index) {
+        _msgList.remove(index);
+        zbroadcast.UpdateList(this._msgList);
     }
 }

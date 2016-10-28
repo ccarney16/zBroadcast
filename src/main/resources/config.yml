@@ -1,4 +1,5 @@
 broadcast-tag: "&8[&9Broadcast&8]"
+send-to-console: true
 delay: 1000
 messages:
 - "This broadcast is sponsored by the Server owner who downloaded zBroadcast!"

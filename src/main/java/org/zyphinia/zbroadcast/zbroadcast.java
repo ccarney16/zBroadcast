@@ -12,23 +12,18 @@ public final class zbroadcast  extends JavaPlugin {
 
     private Broadcast _broadcast = null;
 
+    private static zbroadcast pluginInstance = null;
+
     @Override
     public void onEnable() {
+        pluginInstance = this;
+
         //load config/write new config
         if (!new File(this.getDataFolder(), "config.yml").exists()) {
             this.saveDefaultConfig();
         }
 
-        List<String> _msgList = new ArrayList<String>();
-
-        //might not be the safest idea
-        for (Object l: getConfig().getList("messages")) {
-                _msgList.add(l.toString());
-        }
-
-        //setup variables
-        _broadcast = new Broadcast(getConfig().getString("broadcast-tag"), _msgList, getConfig().getLong("delay"));
-
+        _broadcast = new Broadcast();
 
         try {
             _broadcast.Start();
@@ -46,5 +41,14 @@ public final class zbroadcast  extends JavaPlugin {
 
         //remove all variables
         _broadcast = null;
+    }
+
+    //Update the list
+    public static void UpdateList(List<String> list) {
+        GetInstance().getConfig().set("messages", list);
+    }
+
+    public static zbroadcast GetInstance() {
+        return pluginInstance;
     }
 }

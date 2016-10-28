@@ -7,7 +7,7 @@ messages for my personal minecraft server.
 ## Config.yml
 
 - _broadcast-tag:_ prefix for broadcasting, can be null.
-- _delay:_ delay in java timer (not minecraft!); ie. 1000 = 1 second.
+- _delay:_ delay in seconds.
 - _messages:_ List of messages.
 
 ## Building
