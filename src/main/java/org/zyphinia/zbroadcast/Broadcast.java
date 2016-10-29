@@ -20,14 +20,15 @@ class Broadcast {
 
     private int schedulerTask; //We use CraftBukkit's scheduler system
 
-    //Loads all the variables we need
-    Broadcast() {
-    }
+
+    Broadcast() { }
 
     void Start() throws Error {
-        //if (zbroadcast.GetInstance().getConfig().getLong("delay") < 1000) {
-        //    throw new Error("msg delay must be above or equal to one second (Are you sure you want to lag bukkit/spigot to death?)");
-        //}
+        if (zbroadcast.GetInstance().getConfig().getLong("delay") < 1) {
+            throw new Error("msg delay must be above or equal to one second (Are you sure you want to lag bukkit/spigot to death?)");
+        }
+
+        _msgList = new ArrayList<>();
 
         //might not be the safest idea
         for (Object l: zbroadcast.GetInstance().getConfig().getList("messages")) {
@@ -51,7 +52,7 @@ class Broadcast {
     //Broadcast next message
     private void next() {
         //Makes sure our index does not go over the message's array length
-        if(_currentIndex > (_msgList.toArray().length - 1)) {
+        if(_currentIndex > (_msgList.size() - 1)) {
             _currentIndex = 0;
         }
 
@@ -61,7 +62,7 @@ class Broadcast {
 
     //Broadcasts a message from the list, has a catch all failure.
     void BroadcastMsg(int index) throws Error {
-        if (index > _msgList.toArray().length -1) {
+        if (index > _msgList.size() -1) {
             throw new Error("Index is out of bounds");
         }
 
@@ -95,5 +96,16 @@ class Broadcast {
     void RemoveMsg(int index) {
         _msgList.remove(index);
         zbroadcast.UpdateList(this._msgList);
+    }
+
+    //Returns our current index
+    int GetCurrentIndex() { return _currentIndex; }
+
+    //Returns our list size
+    int GetMessageListSize() { return _msgList.size(); }
+
+    //Returns the actual list in readonly format
+    List<String> GetMessageList() {
+        return _msgList;
     }
 }

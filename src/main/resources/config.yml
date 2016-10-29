@@ -1,6 +1,7 @@
 broadcast-tag: "&8[&9Broadcast&8]"
 send-to-console: true
-delay: 1000
+delay: 60
+deny-message-list-update: false
 messages:
 - "This broadcast is sponsored by the Server owner who downloaded zBroadcast!"
 - "Testing 123, you are using the default config for zBroadcast!"

@@ -43,12 +43,13 @@ public final class zbroadcast  extends JavaPlugin {
         _broadcast = null;
     }
 
-    //Update the list
-    public static void UpdateList(List<String> list) {
+    //Updates the list and saves it
+    static void UpdateList(List<String> list) {
         GetInstance().getConfig().set("messages", list);
+        GetInstance().saveConfig();
     }
 
-    public static zbroadcast GetInstance() {
+    static zbroadcast GetInstance() {
         return pluginInstance;
     }
 }
