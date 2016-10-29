@@ -1,8 +1,7 @@
 # zBroadcast
 ### A dead simple broadcasting plugin (and I mean simple)
 
-My first CraftBukkit/Spigot plugin, all it does is broadcast
-messages for my personal minecraft server.
+A fast and simple broadcasting spigot plugin! No extras attached
 
 ## Config.yml
 

@@ -2,8 +2,6 @@ package org.zyphinia.zbroadcast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.bukkit.Bukkit;
 import net.md_5.bungee.api.ChatColor;
@@ -12,14 +10,13 @@ import org.bukkit.entity.Player;
 /*
  * Main Broadcasting Class, contains all the functions needed to broadcast messages
  */
-class Broadcast {
+public class Broadcast {
 
     private List<String> _msgList = new ArrayList<>(); //Message list
 
     private int _currentIndex = 0; //What are we currently on?
 
     private int schedulerTask; //We use CraftBukkit's scheduler system
-
 
     Broadcast() { }
 
@@ -30,7 +27,7 @@ class Broadcast {
 
         _msgList = new ArrayList<>();
 
-        //might not be the safest idea
+        //Allows us to get the message list safely without major problems.
         for (Object l: zbroadcast.GetInstance().getConfig().getList("messages")) {
             _msgList.add(l.toString());
         }
@@ -45,7 +42,7 @@ class Broadcast {
     }
 
     //Stops the broadcasting class
-    void Stop() {
+    public void Stop() {
         Bukkit.getScheduler().cancelTask(schedulerTask);
     }
 
@@ -81,31 +78,29 @@ class Broadcast {
     }
 
     //Adds a Message to the list
-    void AddMsg(String msg) {
+    public void AddMsg(String msg) {
         _msgList.add(msg);
         zbroadcast.UpdateList(this._msgList);
     }
 
     //Adds a message at a specific index
-    void InsertMsg(int index, String msg) {
+    public void InsertMsg(int index, String msg) {
         _msgList.add(index, msg);
         zbroadcast.UpdateList(this._msgList);
     }
 
     //Removes a message from the list
-    void RemoveMsg(int index) {
+    public void RemoveMsg(int index) {
         _msgList.remove(index);
         zbroadcast.UpdateList(this._msgList);
     }
 
-    //Returns our current index
-    int GetCurrentIndex() { return _currentIndex; }
+    //Returns our current index, add 1 so that we are not starting with 0.
+    public int GetCurrentIndex() { return _currentIndex + 1; }
 
     //Returns our list size
-    int GetMessageListSize() { return _msgList.size(); }
+    public int GetMessageListSize() { return _msgList.size(); }
 
     //Returns the actual list in readonly format
-    List<String> GetMessageList() {
-        return _msgList;
-    }
+    public List<String> GetMessageList() { return _msgList; }
 }
