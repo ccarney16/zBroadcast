@@ -1,13 +1,11 @@
 package org.zyphinia.zbroadcast.Commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.CommandExecutor;
 import org.zyphinia.zbroadcast.zbroadcast;
 import net.md_5.bungee.api.ChatColor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //Will reimplement this into a core system.
@@ -17,6 +15,7 @@ public class CmdBroadcast implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
             returnInfo(sender);
+            return true;
         }
 
         List<String> msglist = zbroadcast.GetInstance().GetBroadcast().GetMessageList();
@@ -49,10 +48,15 @@ public class CmdBroadcast implements CommandExecutor {
 
                 int offset = maxPageSize * page;
 
+                int index = offset + 1;
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&9Broadcast List " + (page + 1) +"/" + totalPages +"&8]"));
                 for(String s : msglist.subList(offset, Math.min(offset + maxPageSize, msglist.size()))) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', index + "). " +  s));
+                    index++;
                 }
+                break;
+            case "reload":
+                zbroadcast.GetInstance().Reload();
                 break;
             default:
                 returnInfo(sender);

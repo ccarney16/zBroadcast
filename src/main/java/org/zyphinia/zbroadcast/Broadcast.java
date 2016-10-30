@@ -21,6 +21,7 @@ public class Broadcast {
     Broadcast() { }
 
     void Start() throws Error {
+
         if (zbroadcast.GetInstance().getConfig().getLong("delay") < 1) {
             throw new Error("msg delay must be above or equal to one second (Are you sure you want to lag bukkit/spigot to death?)");
         }
@@ -31,6 +32,8 @@ public class Broadcast {
         for (Object l: zbroadcast.GetInstance().getConfig().getList("messages")) {
             _msgList.add(l.toString());
         }
+        
+        _currentIndex = 0; //resets current index
 
         //get task ID before going anywhere
         this.schedulerTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(zbroadcast.GetInstance(), new Runnable() {

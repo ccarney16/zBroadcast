@@ -38,16 +38,6 @@ public final class zbroadcast  extends JavaPlugin {
         getLogger().log(Level.INFO, "Simple Broadcast Enabled");
     }
 
-    //Reload our configuration file safely
-    public void ReloadConfig() {
-        _broadcast.Stop();
-
-        this.reloadConfig();
-
-
-        _broadcast.Start();
-    }
-
     @Override
     public void onDisable() {
         //stop all broadcasting
@@ -59,13 +49,14 @@ public final class zbroadcast  extends JavaPlugin {
         _broadcast = null;
     }
 
+
+    //Reload our config safely
     public void Reload() {
         _broadcast.Stop();
 
         reloadConfig();
 
         _broadcast.Start();
-
     }
 
     public void StopBroadcast() {
