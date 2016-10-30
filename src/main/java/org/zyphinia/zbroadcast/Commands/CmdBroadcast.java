@@ -7,10 +7,11 @@ import org.bukkit.command.CommandExecutor;
 import org.zyphinia.zbroadcast.zbroadcast;
 import net.md_5.bungee.api.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //Will reimplement this into a core system.
 public class CmdBroadcast implements CommandExecutor {
-
-    private static final int MAXPAGELIST = 5; //limit to how much /broadcast list can display on a page
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -18,32 +19,45 @@ public class CmdBroadcast implements CommandExecutor {
             returnInfo(sender);
         }
 
+        List<String> msglist = zbroadcast.GetInstance().GetBroadcast().GetMessageList();
+
         switch (args[0]) {
             case "info":
                 returnInfo(sender);
                 break;
             case "list":
-                //page index
-                int pgIndex = 1;
+                int maxPageSize = 5;
+                int totalPages = (int) Math.ceil(msglist.size() / (double) maxPageSize);
 
-                int pages = 0;
+                int page = 1;
 
+                //check if an arguement was given
                 if (args.length >= 2) {
-                    pgIndex = Integer.parseInt(args[1]);
+                    page = Integer.parseInt(args[1]);
 
-                    if (pgIndex == 0) {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cinvalid page number, please try again"));
-                        return true;
+                    if (page <= 0) {
+                        page = 1;
                     }
                 }
 
+                if(page > totalPages) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cInvalid page number!"));
+                    return true;
+                }
+
+                page--; //set page to 0;
+
+                int offset = maxPageSize * page;
+
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&9Broadcast List " + (page + 1) +"/" + totalPages +"&8]"));
+                for(String s : msglist.subList(offset, Math.min(offset + maxPageSize, msglist.size()))) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                }
                 break;
             default:
                 returnInfo(sender);
                 break;
         }
-
-
         return true;
     }
 

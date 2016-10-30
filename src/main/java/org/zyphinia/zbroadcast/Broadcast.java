@@ -64,7 +64,7 @@ public class Broadcast {
         }
 
         //Send to the other broadcast message
-        BroadcastMsg(ChatColor.translateAlternateColorCodes('&',zbroadcast.GetInstance().getConfig().getString("broadcast-tag") + _msgList.toArray()[_currentIndex].toString()));
+        BroadcastMsg(ChatColor.translateAlternateColorCodes('&',zbroadcast.GetInstance().getConfig().getString("broadcast-tag") + _msgList.get(_currentIndex)));
     }
 
     //Allows broadcasting straight up, blank for now.

@@ -3,3 +3,6 @@ main: org.zyphinia.zbroadcast.zbroadcast
 description: A dead simple message broadcast plugin.
 version: 0.1-dev
 author: Zyphys
+commands:
+  broadcast:
+     usage: /broadcast

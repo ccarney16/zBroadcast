@@ -1,4 +1,4 @@
-broadcast-tag: "&8[&9Broadcast&8]"
+broadcast-tag: "&8[&9Broadcast&8] "
 send-to-console: true
 delay: 60
 broadcast-to-empty-server: false

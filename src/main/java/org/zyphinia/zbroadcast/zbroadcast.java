@@ -33,7 +33,7 @@ public final class zbroadcast  extends JavaPlugin {
             throw ex;
         }
 
-        //this.getCommand("broadcast").setExecutor(new CmdBroadcast());
+        this.getCommand("broadcast").setExecutor(new CmdBroadcast());
 
         getLogger().log(Level.INFO, "Simple Broadcast Enabled");
     }
