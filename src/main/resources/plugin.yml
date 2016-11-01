@@ -4,5 +4,10 @@ description: A dead simple message broadcast plugin.
 version: 0.1-dev
 author: Zyphys
 commands:
-  broadcast:
-     usage: /broadcast
+  zbroadcast:
+     description: Main command to zBroadcast
+     usage: /zbroadcast
+permissions:
+  zyphinia.broadcast:
+    default: op
+    description: Gives players access to /zbroadcast

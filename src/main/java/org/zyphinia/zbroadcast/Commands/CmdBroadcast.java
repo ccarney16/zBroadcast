@@ -13,8 +13,16 @@ public class CmdBroadcast implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("zyphinia.broadcast")) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have access to /zbroadcast"));
+            return true;
+        }
+
         if (args.length == 0) {
             returnInfo(sender);
+
+            //Send if player or console did not input any sort of command
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cTo see all commands, type /zbroadcast help"));
             return true;
         }
 
@@ -24,15 +32,22 @@ public class CmdBroadcast implements CommandExecutor {
             case "info":
                 returnInfo(sender);
                 break;
+            case "help":
+                break;
             case "list":
                 int maxPageSize = 5;
                 int totalPages = (int) Math.ceil(msglist.size() / (double) maxPageSize);
 
                 int page = 1;
 
-                //check if an arguement was given
+                //check if an argument was given
                 if (args.length >= 2) {
-                    page = Integer.parseInt(args[1]);
+                    try {
+                        page = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException ex){
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage /zbroadcast list <number>"));
+                        return true;
+                    }
 
                     if (page <= 0) {
                         page = 1;
@@ -56,10 +71,15 @@ public class CmdBroadcast implements CommandExecutor {
                 }
                 break;
             case "reload":
-                zbroadcast.GetInstance().Reload();
+                try {
+                    zbroadcast.GetInstance().Reload();
+                } catch(Error ex) {
+                    sender.sendMessage("An error occured while reloading, please check your config and do '/zbroadcast reload' once fixed");
+                    zbroadcast.GetInstance().GetBroadcast().Stop();
+                }
                 break;
             default:
-                returnInfo(sender);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUnknown Command, To see all commands, type /zbroadcast help"));
                 break;
         }
         return true;

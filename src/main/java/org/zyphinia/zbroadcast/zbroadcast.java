@@ -33,7 +33,7 @@ public final class zbroadcast  extends JavaPlugin {
             throw ex;
         }
 
-        this.getCommand("broadcast").setExecutor(new CmdBroadcast());
+        this.getCommand("zbroadcast").setExecutor(new CmdBroadcast());
 
         getLogger().log(Level.INFO, "Simple Broadcast Enabled");
     }
@@ -59,10 +59,6 @@ public final class zbroadcast  extends JavaPlugin {
         _broadcast.Start();
     }
 
-    public void StopBroadcast() {
-        _broadcast.Stop();
-    }
-
     public boolean IsRunning() {
         return _isRunning;
     }
@@ -72,7 +68,7 @@ public final class zbroadcast  extends JavaPlugin {
     }
 
     //Updates the list and saves it
-    public static void UpdateList(List<String> list) {
+    static void UpdateList(List<String> list) {
         GetInstance().getConfig().set("messages", list);
         GetInstance().saveConfig();
     }
