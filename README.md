@@ -11,18 +11,30 @@ A fast and simple broadcasting spigot plugin! No extras attached
 - _deny-message-list-update:_ denies any editing of the list via Commands (even when Op)
 - _messages:_ List of messages.
 
-## Building
+## Commands
+
+- _/zbroadcast_ - displays current info such as is it enabled or not.
+- _/zbroadcast info_ - same as top
+- _/zbroadcast help_ - if you dont know the commands listed here
+- _/zbroadcast list_ <pageIndex> - message list in page increments of 5
+- _/zbroadcast reload_ - Reloads the plugin config (If you dont use a plugin manager)
+
+## Permissions
+
+- zyphinia.broadcast - provides access to /zbroadcast
+
+## Building the plugin
 
 Can use anything that uses maven. IntelliJ IDEA Preferred
 
 ## License
 
-Licensed under the BSD License, check LICENSE file for more information.
+Licensed under the BSD License, check LICENSE file for more information
 
-## TODO
+## Future Plans
 
-- Add Command Structure
-- Build an easy to use API
+- Modularize architecture (core system maybe?)
+- Maybe expand to other types of broadcasting
 
 ## What's NOT planned
 
